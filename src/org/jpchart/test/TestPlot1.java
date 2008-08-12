@@ -27,8 +27,6 @@ import org.jpchart.plot.price.renderer.LinePriceRenderer;
 import org.jpchart.plot.price.renderer.MultiPriceRenderer;
 import org.jpchart.plot.price.renderer.OHLCPriceRenderer;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import javax.swing.UIManager;
 import org.jpchart.data.MarketDataYahoo;
 import org.jpchart.indicator.CutlerRSI;
@@ -58,14 +56,14 @@ public class TestPlot1 extends javax.swing.JFrame {
             setLocationRelativeTo(null);
 
             MarketData dataSource = new MarketDataYahoo();
-            //MarketData dataSource = new MarketDataMinute(connection);
             Market lastMarket = dataSource.getLast("goog");
             plot.setMarketData(dataSource, lastMarket);
+            
             //plot.setPricePlotRenderer(new OHLCPriceRenderer(OHLCPriceRenderer.PlotTypes.OHLC, true));
             //plot.setPricePlotRenderer(new CandlestickPriceRenderer());
             MultiPriceRenderer multiRenderer = new MultiPriceRenderer();
-            //multiRenderer.addRenderer(new CandlestickPriceRenderer());
-            multiRenderer.addRenderer(new OHLCPriceRenderer(OHLCPriceRenderer.PlotTypes.OHLC, false));
+            multiRenderer.addRenderer(new CandlestickPriceRenderer());
+            //multiRenderer.addRenderer(new OHLCPriceRenderer(OHLCPriceRenderer.PlotTypes.OHLC, false));
             //multiRenderer.addRenderer(new LinePriceRenderer(LinePriceRenderer.PlotTypes.CLOSE, false));
             //multiRenderer.addRenderer(new LinePriceRenderer(LinePriceRenderer.PlotTypes.HIGH, false));
             //multiRenderer.addRenderer(new LinePriceRenderer(LinePriceRenderer.PlotTypes.LOW, false));

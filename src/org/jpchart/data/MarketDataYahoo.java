@@ -63,7 +63,7 @@ public class MarketDataYahoo implements MarketData {
                 if (parts.length != 7) throw new IllegalArgumentException("Incorrect data format: " + input);
                 
                 Day day = new Day(parts[0]);
-                BigDecimal open = new BigDecimal(parts[6]);
+                BigDecimal open = new BigDecimal(parts[1]);
                 BigDecimal high = new BigDecimal(parts[2]);
                 BigDecimal low = new BigDecimal(parts[3]);
                 BigDecimal close = new BigDecimal(parts[4]);
