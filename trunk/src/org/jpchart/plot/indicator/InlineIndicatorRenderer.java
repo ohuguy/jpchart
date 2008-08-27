@@ -33,5 +33,5 @@ public interface InlineIndicatorRenderer {
      * @param g
      * @param plotFrame
      */
-    public void paint(Graphics2D g, PlotFrame plotFrame);
+    public void paintInline(Graphics2D g, PlotFrame plotFrame);
 }

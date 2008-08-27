@@ -42,7 +42,7 @@ public class InlineLineIndicatorRenderer implements InlineIndicatorRenderer {
         this.indicator = indicator;
     }
     
-    public void paint(Graphics2D g, PlotFrame plotFrame) {
+    public void paintInline(Graphics2D g, PlotFrame plotFrame) {
         g.setColor(Color.BLACK);
 
         int barWidth = plotFrame.getBarWidth();
