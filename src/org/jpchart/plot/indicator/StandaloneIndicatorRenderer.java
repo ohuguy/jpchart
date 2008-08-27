@@ -33,5 +33,5 @@ public interface StandaloneIndicatorRenderer {
      * @param g
      * @param plotFrame
      */
-    public void paint(Graphics2D g, PlotFrame plotFrame);
+    public void paintStandalone(Graphics2D g, PlotFrame plotFrame);
 }

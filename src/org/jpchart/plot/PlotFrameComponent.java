@@ -538,7 +538,7 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
         Graphics2D gArea = (Graphics2D) g.create(0, 0, plotWidth, plotHeight);
         
         for (InlineIndicatorRenderer indicatorRenderer : inlinePrePriceIndicators)
-            indicatorRenderer.paint(gArea, this);
+            indicatorRenderer.paintInline(gArea, this);
     }
     
     private void drawPricePlot(Graphics2D g) {
@@ -575,7 +575,7 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
         Graphics2D gArea = (Graphics2D) g.create(0, 0, plotWidth, plotHeight);
         
         for (InlineIndicatorRenderer indicatorRenderer : inlinePostPriceIndicators)
-            indicatorRenderer.paint(gArea, this);
+            indicatorRenderer.paintInline(gArea, this);
     }
     
     private void drawPointerCross(Graphics2D g) {
@@ -657,7 +657,7 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
         
         if (standaloneIndicators.size() > 0) {
             StandaloneIndicatorRenderer renderer = standaloneIndicators.get(0);
-            renderer.paint(gArea, this);
+            renderer.paintStandalone(gArea, this);
         }
     }
 
