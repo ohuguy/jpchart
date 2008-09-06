@@ -35,6 +35,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -56,6 +57,7 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
     private Dimension dim = new Dimension(600, 400);
     private int lastHeight = dim.height;
     private int lastWidth = dim.width;
+    private BufferedImage renderCache = null;
     
     private boolean mouseClickedState = false;
     private boolean mousePressedState = false;
@@ -257,7 +259,10 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
             doRepaint = true;
         }
         
-        if (doRepaint) repaint();
+        if (doRepaint) {
+            renderCache = null;
+            repaint();
+        }
     }
     
     public boolean isMouseClicked() {
@@ -467,29 +472,36 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
     public void paint(Graphics g) {
         getSize(dim);
         
-        updatePositions();
+        if (updatePositions() || renderCache == null || !isMouseReleased()) {
+            // Update cache
+            renderCache = new BufferedImage(dim.width, dim.height, BufferedImage.TYPE_INT_RGB);
+
+            Graphics2D g2d = renderCache.createGraphics();
+            
+            // Fill with background color
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, dim.width, dim.height);
+
+            // Draw pre price inline indicators
+            drawPrePriceIndicators(g2d);
+
+            // Draw price plot area
+            drawPricePlot(g2d);
+
+            // Draw post price inline indicators
+            drawPostPriceIndicators(g2d);
+
+            drawPriceYAxis(g2d);
+
+            drawPriceXAxis(g2d);
+
+            // Draw standalone indicators
+            drawStandaloneIndicators(g2d);
+        }
         
         Graphics2D g2d = (Graphics2D) g;
         
-        // Fill with background color
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, dim.width, dim.height);
-        
-        // Draw pre price inline indicators
-        drawPrePriceIndicators(g2d);
-        
-        // Draw price plot area
-        drawPricePlot(g2d);
-        
-        // Draw post price inline indicators
-        drawPostPriceIndicators(g2d);
-        
-        drawPriceYAxis(g2d);
-        
-        drawPriceXAxis(g2d);
-        
-        // Draw standalone indicators
-        drawStandaloneIndicators(g2d);
+        g.drawImage(renderCache, 0, 0, null);
         
         if (isMouseReleased() && isOverPricePlot(currentMouseX, currentMouseY))
             drawPointerCross(g2d);
@@ -501,8 +513,14 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
     /**
      * This will update all positions, which might have changed due to
      * resizing and such.
+     * 
+     * Returns true if update was needed
+     * 
+     * @return True if update was needed
      */
-    private void updatePositions() {
+    private boolean updatePositions() {
+        boolean updated = false;
+        
         if (dim.height != lastHeight) {
             // Hight has changed
             // Update price plot height
@@ -513,14 +531,20 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
             // Update pricePixel
             aspect = ((double)pricePlotHeight)/(double)lastPricePlotHeight;
             pricePixel = pricePixel.divide(new BigDecimal(aspect), RoundingMode.HALF_EVEN);
+            
+            updated = true;
         }
         
         if (dim.width != lastWidth) {
             lastBarOpenX += dim.width - lastWidth;
+            
+            updated = true;
         }
         
         lastHeight = dim.height;
         lastWidth = dim.width;
+        
+        return updated;
     }
     
     private void drawResizeLines(Graphics2D g) {

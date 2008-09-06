@@ -62,6 +62,24 @@ public abstract class AbstractStandaloneIndicatorRenderer implements StandaloneI
     }
     
     /**
+     * Get upper limit, set using setLimits(..)
+     * 
+     * @return Upper limit
+     */
+    protected BigDecimal getUpperLimit() {
+        return upper;
+    }
+    
+    /**
+     * Get lower limit, set using setLimits(..)
+     * 
+     * @return Lower limit
+     */
+    protected BigDecimal getLowerLimit() {
+        return lower;
+    }
+    
+    /**
      * Returns the Y pixel position for given value.
      * Note that Y = 0 is on the top.
      * 

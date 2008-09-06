@@ -39,9 +39,25 @@ import org.jpchart.time.TimeUnit;
 public class StandaloneLineIndicatorRenderer extends AbstractStandaloneIndicatorRenderer implements StandaloneIndicatorRenderer {
     private final SimpleIndicator indicator;
     private Map<Long, BigDecimal> valueCache = new HashMap<Long, BigDecimal>();
+    private final boolean autoSetLimits;
     
     public StandaloneLineIndicatorRenderer(SimpleIndicator indicator) {
         this.indicator = indicator;
+        autoSetLimits = true;
+    }
+    
+    public StandaloneLineIndicatorRenderer(SimpleIndicator indicator, BigDecimal upper, BigDecimal lower) {
+        this.indicator = indicator;
+        
+        // Switch if needed
+        if (upper.compareTo(lower) < 0) {
+            BigDecimal tmp = lower;
+            lower = upper;
+            upper = tmp;
+        }
+        
+        setLimits(upper, lower);
+        autoSetLimits = false;
     }
 
     public void paintStandalone(Graphics2D g, PlotFrame plotFrame) {
@@ -94,7 +110,8 @@ public class StandaloneLineIndicatorRenderer extends AbstractStandaloneIndicator
             }
         }
         
-        setLimits(maxValue, minValue);
+        if (autoSetLimits)
+            setLimits(maxValue, minValue);
         
         for (int x = 0; x < markets.size()-1; x++) {
             currentMarket = markets.get(x);
@@ -114,7 +131,9 @@ public class StandaloneLineIndicatorRenderer extends AbstractStandaloneIndicator
         }
         
         drawAxis(g, plotFrame);
-        //drawLine(g, plotFrame, maxValue.subtract(BigDecimal.valueOf(10)), Color.BLACK, true);
-        //drawLine(g, plotFrame, minValue.add(BigDecimal.valueOf(10)), Color.BLACK, true);
+        if (!autoSetLimits) {
+            drawLine(g, plotFrame, getUpperLimit().subtract(BigDecimal.valueOf(10)), Color.BLACK, true);
+            drawLine(g, plotFrame, getLowerLimit().add(BigDecimal.valueOf(10)), Color.BLACK, true);
+        }
     }
 }
