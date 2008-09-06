@@ -66,7 +66,7 @@ public class MarketDataYahoo implements MarketData {
                 BigDecimal open = new BigDecimal(parts[1]);
                 BigDecimal high = new BigDecimal(parts[2]);
                 BigDecimal low = new BigDecimal(parts[3]);
-                BigDecimal close = new BigDecimal(parts[4]);
+                BigDecimal close = new BigDecimal(parts[6]);
                 BigDecimal volume = new BigDecimal(parts[5]);
                 
                 Market market = new MarketTick(ticker, day, open, high, low, close, volume, this);
