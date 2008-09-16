@@ -28,6 +28,14 @@ import org.jpchart.time.TimeUnit;
  */
 public interface MarketData {
     /**
+     * Use this to set the data source given to new Market objects generated
+     * by this data source. Normally that would be the data source it self,
+     * but that would change if that data source is wrapped within another
+     * data source.
+     */
+    void setMarketDataSource(MarketData dataSource);
+    
+    /**
      * Use this to close any connections and such (like a database connection)
      */
     void close() throws Exception;

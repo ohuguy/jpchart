@@ -605,7 +605,8 @@ public class PlotFrameComponent extends JComponent implements MouseListener, Mou
     private void drawPointerCross(Graphics2D g) {
         g.setColor(Color.BLACK);
         g.drawLine(0, currentMouseY, dim.width - getYAxisWidth() - 1, currentMouseY);
-        g.drawLine(currentMouseX, 0, currentMouseX, pricePlotHeight);
+        //g.drawLine(currentMouseX, 0, currentMouseX, pricePlotHeight);
+        g.drawLine(currentMouseX, 0, currentMouseX, dim.height);
         
         int priceBoxHeight = 20;
         int priceBoxWidth = 120;

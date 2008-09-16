@@ -37,6 +37,11 @@ import org.jpchart.time.TimeUnit;
 public class MarketDataYahoo implements MarketData {
     private ArrayList<Market> marketCache = new ArrayList<Market>();
     private String ticker = null;
+    private MarketData dataSource;
+    
+    public MarketDataYahoo() {
+        this.dataSource = this;
+    }
     
     private void prepareTicker(String ticker) {
         ticker = ticker.toUpperCase();
@@ -69,7 +74,7 @@ public class MarketDataYahoo implements MarketData {
                 BigDecimal close = new BigDecimal(parts[6]);
                 BigDecimal volume = new BigDecimal(parts[5]);
                 
-                Market market = new MarketTick(ticker, day, open, high, low, close, volume, this);
+                Market market = new MarketTick(ticker, day, open, high, low, close, volume, dataSource);
                 
                 // Note: Yahoo orders with newest first
                 marketCache.add(market);
@@ -200,5 +205,9 @@ public class MarketDataYahoo implements MarketData {
         }
         
         return marketCache.size();
+    }
+
+    public void setMarketDataSource(MarketData dataSource) {
+        this.dataSource = dataSource;
     }
 }

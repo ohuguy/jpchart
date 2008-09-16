@@ -28,6 +28,7 @@ import org.jpchart.plot.price.renderer.MultiPriceRenderer;
 import org.jpchart.plot.price.renderer.OHLCPriceRenderer;
 import java.math.BigDecimal;
 import javax.swing.UIManager;
+import org.jpchart.data.MarketDataMem;
 import org.jpchart.data.MarketDataYahoo;
 import org.jpchart.indicator.CutlerRSI;
 import org.jpchart.indicator.SimpleDeltaMovingAverage;
@@ -51,12 +52,16 @@ public class TestPlot1 extends javax.swing.JFrame {
             initComponents();
             PlotFrame plot = new PlotFrameComponent();
             setContentPane((PlotFrameComponent)plot);
+            setTitle("JPChart demo - www.jpchart.org");
             validate();
             pack();
             setLocationRelativeTo(null);
-
-            MarketData dataSource = new MarketDataYahoo();
-            Market lastMarket = dataSource.getLast("goog");
+            
+            String ticker = "goog";
+            
+            // Use MarketDataMem as a wrapped around cache, since it's faster for selected ticker.
+            MarketData dataSource = new MarketDataMem(new MarketDataYahoo(), ticker);
+            Market lastMarket = dataSource.getLast(ticker);
             plot.setMarketData(dataSource, lastMarket);
             
             //plot.setPricePlotRenderer(new OHLCPriceRenderer(OHLCPriceRenderer.PlotTypes.OHLC, true));
